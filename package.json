@@ -37,5 +37,8 @@
     "devDependencies": {},
     "bundleDependencies": [],
     "private": true,
-    "main": "bin/www"
+    "main": "bin/www",
+    "scripts": {
+        "start": "node bin/www"
+    }
 }
