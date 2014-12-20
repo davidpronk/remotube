@@ -1,35 +1,41 @@
 {
-  "name": "OpenShift-Sample-App",
-  "version": "1.0.0",
-  "description": "OpenShift Sample Application",
-  "keywords": [
-    "OpenShift",
-    "Node.js",
-    "application",
-    "openshift"
-  ],
-  "author": {
-    "name": "OpenShift",
-    "email": "ramr@example.org",
-    "url": "http://www.openshift.com/"
-  },
-  "homepage": "http://www.openshift.com/",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/openshift/origin-server"
-  },
-
-  "engines": {
-    "node": ">= 0.6.0",
-    "npm": ">= 1.0.0"
-  },
-
-  "dependencies": {
-    "express": "~3.4.4"
-  },
-  "devDependencies": {},
-  "bundleDependencies": [],
-
-  "private": true,
-  "main": "server.js"
+    "name": "remotUbe",
+    "version": "0.0.1",
+    "description": "youTube remote control",
+    "keywords": [
+        "OpenShift",
+        "Node.js",
+        "application",
+        "openshift",
+        "youtube",
+        "remotecontrol"
+    ],
+    "author": {
+        "name": "David Pronk",
+        "email": "stuff@davidpronk.nl",
+        "url": "http://www.davidpronk.nl"
+    },
+    "homepage": "http://www.davidpronk.nl",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/davidpronk/remotube"
+    },
+    "engines": {
+        "node": ">= 0.10",
+        "npm": ">= 1.0.0"
+    },
+    "dependencies": {
+        "express": "~4.9.0",
+        "cookie-parser": "~1.3.3",
+        "morgan": "~1.3.0",
+        "serve-favicon": "~2.1.3",
+        "debug": "~2.0.0",
+        "node-compass": "0.2.3",
+        "mustache-express": "~1.2.0",
+        "socket.io": "~1.2.0"
+    },
+    "devDependencies": {},
+    "bundleDependencies": [],
+    "private": true,
+    "main": "bin/www"
 }

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Controls</title>
+
+        <link rel="stylesheet" href="/css/control-style.css"/>
+        <script data-main="/js/control/impl" src="/js/vendor/require-2.1.15.min.js"></script>
+
+    </head>
+
+    <body>
+        <h3>controls <span id="status"></span></h3>
+        <h4 id="title"></h4>
+        <p id="description"></p>
+        <p id="thumb"></p>
+
+        <div>
+            <button id="play" data-cmd="play">play</button>
+            <button id="pause" data-cmd="pause">pause</button>
+            <!--<button data-cmd="mute">mute</button>-->
+            <span id="currentTime">0:00</span>
+            <span id="separator">/</span>
+            <span id="duration">0:00</span>
+        </div>
+
+        <div id="scrubber">
+            <div id="progress"></div>
+        </div>
+
+        <ul>
+            <li><a class="youTubeUrl" href="https://www.youtube.com/watch?v=Hjkc9m9vYCU">ES6: The future is now</a></li>
+            <li><a class="youTubeUrl" href="https://www.youtube.com/watch?v=YLmCLYojNGI">Tal Wilkenfield</a></li>
+            <li><a class="youTubeUrl" href="https://www.youtube.com/watch?v=vmgoO43_0kk">Darkside in Paris</a></li>
+            <li><a class="youTubeUrl" href="https://www.youtube.com/watch?v=n7zyfArxibk">Blitzen Trapper - Black River Killer</a></li>
+        </ul>
+
+        <div>
+            <label for="formInput">text</label>
+            <input id="formInput" type="text" value="https://www.youtube.com/watch?v=M7lc1UVf-VE">
+            <button data-cmd="setsrc">GO!</button>
+        </div>
+
+    </body>
+</html>

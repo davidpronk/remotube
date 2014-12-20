@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Player</title>
+
+        <script data-main="/static/js/play/impl" src="/static/js/vendor/require-2.1.15.min.js"></script>
+
+        <link rel="stylesheet" href="/static/css/vendor/bootstrap.min.css">
+
+        <style>
+            #player,
+            iframe {
+                width: 480px;
+                height: 270px;
+                border: 1px solid grey;
+            }
+            .col-centered{
+                text-align: center;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <div class=container">
+
+            <div class="row">
+
+                <div class="col-md-6 col-centered">
+                    <div id="player"></div>
+                </div>
+
+                <div class="col-md-6 col-centered">
+                    <iframe name="controlstarget"></iframe>
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-1"></div>
+
+                <div class="col-md-2">
+                    <a id="link" target="controlstarget">controls</a>
+                    <div id="qr"></div>
+                </div>
+
+                <div class="col-md-2">
+                    <pre><span id="cmd"></span></pre>
+                </div>
+
+            </div>
+
+        </div>
+
+    </body>
+
+</html>

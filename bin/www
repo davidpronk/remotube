@@ -1,0 +1,170 @@
+#!/usr/bin/env node
+var debug = require( 'debug' )( 'remotUbe' );
+var app = require( '../app' );
+var Player = require( './Player.js' );
+var Control = require( './Control.js' );
+
+app.set( 'port', process.env.PORT || 8080 );
+
+var server = app.listen( app.get( 'port' ), function () {
+    debug( 'Express server listening on port ' + server.address().port );
+});
+
+var io = require( 'socket.io' )( server );
+
+var playerSpace = io.of( '/play' );
+var controlSpace = io.of( '/control' );
+
+var players = {};
+var controls = {};
+
+
+playerSpace.use( function ( socket, next ) {
+
+    var id = socket.id;
+
+    players[id] = new Player( socket );
+    socket.emit( 'init', id );
+
+    next();
+
+});
+
+
+controlSpace.use( function ( socket, next ) {
+
+    var controlId = socket.id;
+    var playerId = socket.request._query['playerId'];
+
+    if( players[playerId] ) {
+
+        var player = players[playerId];
+        var control = new Control( controlId, playerId, socket );
+
+        // Add the new controls to the list of controls[]
+        controls[controlId] = control;
+
+        // Add the controls to the corresponding player in players[]
+        player.addControl( control );
+        next();
+
+    }
+});
+
+
+playerSpace.on( 'connection', function ( socket ) {
+
+    // TODO: save player state / metadata to player
+
+    socket.on( 'timeupdate', function( time ){
+        if( players[socket.id] ) {
+            players[socket.id].getMeta().setCurrentTime( time );
+            toControls( players[socket.id].getControls(), 'timeupdate', time );
+        }
+    });
+
+    socket.on( 'playing', function(){
+        if( players[socket.id] ) {
+            players[socket.id].setPlaying( true );
+            toControls( players[socket.id].getControls(), 'playing' );
+        }
+    });
+
+    socket.on( 'paused', function(){
+        if( players[socket.id] ) {
+            players[socket.id].setPlaying( false );
+            toControls( players[socket.id].getControls(), 'paused' );
+        }
+    });
+
+    socket.on( 'durationchange', function( duration ){
+        if( players[socket.id] ) {
+            players[socket.id].getMeta().setDuration( duration );
+            toControls( players[socket.id].getControls(), 'durationchange', duration );
+        }
+    });
+
+    socket.on( 'srcset', function( src ){
+        if( players[socket.id] ) {
+            players[socket.id].getMeta().setSrc( src );
+            toControls( players[socket.id].getControls(), 'srcset', src );
+        }
+    });
+
+});
+
+
+function toControls( controls, eventType, data ){
+
+    if( controls ){
+        var len = controls.length;
+    }
+
+    for ( var i = 0; i < len; i++ ) {
+        var control = controls[i].getId();
+
+        controlSpace.to( control ).emit( eventType, data );
+    }
+}
+
+
+controlSpace.on( 'connection', function ( socket ) {
+
+    var control = controls[socket.id];
+    if( control ){
+
+        var controlId = control.getId();
+        var playerId = control.getPlayerId();
+
+        var state = players[playerId].isPlaying() === true ? 'playing' : 'paused';
+        var duration = players[playerId].getMeta().getDuration();
+        var currentTime = players[playerId].getMeta().getCurrentTime();
+        var src = players[playerId].getMeta().getSrc();
+
+        controlSpace.to( controlId ).emit( state );
+        controlSpace.to( controlId ).emit( 'durationchange', duration );
+        controlSpace.to( controlId ).emit( 'timeupdate', currentTime );
+        if( src ){
+            controlSpace.to( controlId ).emit( 'srcset', src );
+        }
+    }
+
+    socket.on( 'order', function ( order ) {
+
+        var id = order.playerId;
+        var player = players[id];
+
+        if ( player ) {
+
+            switch( order.cmd ){
+
+                case 'setsrc':
+                    players[order.playerId].getSocket().emit( order.cmd, order.src );
+                    break;
+
+                case 'setcurrenttime':
+                    players[order.playerId].getSocket().emit( order.cmd, order.time );
+                    break;
+
+                default:
+                    players[order.playerId].getSocket().emit( order.cmd );
+                    break;
+            }
+
+        } else {
+            this.emit( 'vout', 'Player no longer exists...' );
+        }
+    });
+
+});
+
+
+// TODO: Remove the player from players[] when the session ends
+//    socket.on( 'disconnect', function () {
+//
+//        delete players[socket.id];
+//        delete controls[socket.id];
+//
+//    });
+//
+//});
