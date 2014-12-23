@@ -4,10 +4,15 @@ var app = require( '../app' );
 var Player = require( './Player.js' );
 var Control = require( './Control.js' );
 
-app.set( 'port', process.env.OPENSHIFT_NODEJS_PORT || 3000 );
+var ipaddress = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
+var port      = process.env.OPENSHIFT_NODEJS_PORT || 3000;
 
-var server = app.listen( app.get( 'port' ), function () {
+app.set( 'port', port );
+app.set( 'ipaddress', ipaddress );
+
+var server = app.listen( port, ipaddress, function () {
     debug( 'Express server listening on port ' + server.address().port );
+    console.log('Server running on:',ipaddress,':',port );
 });
 
 var io = require( 'socket.io' )( server );
