@@ -7,10 +7,15 @@ var compass =         require( 'node-compass' );
 var mustacheExpress = require( 'mustache-express' );
 
 var index =           require( './routes/index' );
-var control =        require( './routes/control' );
+var control =         require( './routes/control' );
 
 var app = express();
 
+var ipaddress = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
+var port      = process.env.OPENSHIFT_NODEJS_PORT || 3000;
+
+app.set( 'ipaddress', ipaddress );
+app.set( 'port', port );
 
 // view engine setup
 app.engine( 'html', mustacheExpress() );

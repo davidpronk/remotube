@@ -7,12 +7,12 @@ var Control = require( './Control.js' );
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
 var port      = process.env.OPENSHIFT_NODEJS_PORT || 3000;
 
-app.set( 'ipaddr', ipaddress );
-app.set( 'port', port );
+//app.set( 'ipaddress', ipaddress );
+//app.set( 'port', port );
 
 
 var server = app.listen( port, ipaddress, function () {
-    debug( 'Express server listening on port ' + server.address().port );
+    console.log( 'Express server listening on port ' + server.address().port );
     console.log('Server running on:',ipaddress,':',port );
 });
 
