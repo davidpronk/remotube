@@ -13,17 +13,24 @@ require(
         'socketio',
         'js/play/YouTubePlayer',
         'jquery',
-        'js/vendor/qrcode.min',
-        'js/vendor/bootstrap-3.3.1.min'
+        'js/vendor/qrcode.min'
     ],
 
     function( SocketIO, youTubePlayer, $ ){
 
         'use strict';
 
+        var loc = document.location,
+            path = '/play',
+            connectTo = path;
+
+        if( loc.hostname.indexOf( 'rhcloud' ) !== -1 ){
+            connectTo = loc.protocol + '//' + loc.hostname + ':8000' + path;
+        }
+
         var playerNode = document.getElementById( 'player' );
         var player = new youTubePlayer();
-        var socket = SocketIO.connect( '/play' );
+        var socket = SocketIO.connect( connectTo );
 
         player.createCanvas( playerNode );
 

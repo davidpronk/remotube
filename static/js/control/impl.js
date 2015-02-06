@@ -13,14 +13,21 @@ require(
         'socketio',
         'js/control/Controller',
         'js/control/YouTubeApi',
-        'jquery',
-        'js/vendor/bootstrap-3.3.1.min'
+        'jquery'
     ],
 
     function( SocketIO, Controller, YouTubeApi, $ ){
 
+        var loc = document.location,
+            path = '/control',
+            connectTo = path;
+
+        if( loc.hostname.indexOf( 'rhcloud' ) !== -1 ){
+            connectTo = loc.protocol + '//' + loc.hostname + ':8000' + path;
+        }
+
         var playerId = getURLParameter( 'id' );
-        var socket = SocketIO.connect( '/control', {
+        var socket = SocketIO.connect( connectTo, {
             query: 'playerId=' + playerId
         });
 
